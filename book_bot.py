@@ -2,6 +2,7 @@ import os
 import json
 import requests
 import asyncio
+import re
 from bs4 import BeautifulSoup
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
@@ -30,9 +31,15 @@ def save_json(file, data):
 user_isbn_map = load_json(DATA_FILE)
 user_settings = load_json(SETTINGS_FILE)
 
+# === UTILITIES ===
+def clean_title(raw_title: str) -> str:
+    base = ' '.join(raw_title.split())
+    return re.sub(r'\s*-\s*', ' - ', base)
+
 # === OTTENGO LE INFO DEL SINGOLO LIBRO PARTENDO DA ISBN ===
 def get_book_info(isbn):
     url = f"https://blackwells.co.uk/bookshop/product/{isbn}"
+    # MIGLIORARE USER AGENT PER RIUSCIRE A NON FARE I COGLIONI E MAGARI NON FARSI BECCARE
     headers = {"User-Agent": "Mozilla/5.0"}
 
     try:
@@ -46,7 +53,7 @@ def get_book_info(isbn):
         price_tag = main.find("li", class_="product-price--current")
         discount_tag = main.find("p", class_="product-price--discount")
 
-        title = title_tag.text.strip() if title_tag else "Titolo non trovato"
+        title = clean_title(title_tag.text.strip()) if title_tag else "Titolo non trovato"
         price = price_tag.text.strip() if price_tag else "Prezzo non trovato"
         discount = discount_tag.text.strip() if discount_tag and "Save" in discount_tag.text else None
 
@@ -64,6 +71,7 @@ async def notify_user(app, user_id):
     offerte, scaduti = [], []
 
     for book in books:
+        url = "https://blackwells.co.uk/bookshop/product/"
         isbn = book["isbn"]
         old_discount = book.get("discount")
         info = get_book_info(isbn)
@@ -73,7 +81,7 @@ async def notify_user(app, user_id):
         title, price, new_discount = info["title"], info["price"], info["discount"]
 
         if new_discount:
-            offerte.append(f"📚 {title}\n💰 {price}\n🔥 {new_discount}\n🔢 {isbn}\n")
+            offerte.append(f"📚 {title}\n💰 {price}\n🔥 {new_discount}\n🔢 {isbn}\n 🔗{url}{isbn}")
         if old_discount and not new_discount:
             scaduti.append(f"❌ Fine sconto per \"{title}\"")
 
@@ -189,7 +197,7 @@ async def list_isbn(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text = (
             f"📚 *{title}*\n"
             f"💰 Prezzo: {price}\n"
-            f"🔥 Sconto: {discount}\n"
+            f"{'🔥 Sconto: ' + discount + '\n' if discount else ''}"
             f"🔢 ISBN: {isbn}"
         )
 
@@ -263,31 +271,51 @@ async def delete_book_callback(update: Update, context: ContextTypes.DEFAULT_TYP
 async def gestisci_messaggio(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = str(update.effective_user.id)
     stato = user_state.get(user_id)
+
+    # L'utente NON è in modalità inserimento
     if stato != "inserimento":
         await update.message.reply_text("Comando non riconosciuto. Usa /insert o /list.")
         return
 
     righe = update.message.text.splitlines()
     isbn_validi = [r.strip() for r in righe if r.strip().isdigit()]
+
+    # L'utente è in modalità inserimento ma non ha scritto ISBN validi
     if not isbn_validi:
-        await update.message.reply_text("Nessun codice ISBN valido trovato.")
+        await update.message.reply_text("❌ Nessun codice ISBN valido trovato. Ricorda di inserire solo numeri, uno per riga.")
         return
 
     user_isbn_map.setdefault(user_id, [])
-    count = 0
+
+    aggiunti = []
+    duplicati = []
+    invalidi = []
 
     for isbn in isbn_validi:
         if any(item["isbn"] == isbn for item in user_isbn_map[user_id]):
+            duplicati.append(isbn)
             continue
         info = get_book_info(isbn)
         if not info:
+            invalidi.append(isbn)
             continue
         user_isbn_map[user_id].append({"isbn": isbn, **info})
-        count += 1
+        aggiunti.append(isbn)
 
     save_json(DATA_FILE, user_isbn_map)
-    user_state[user_id] = None
-    await update.message.reply_text(f"Salvati {count} nuovi ISBN.")
+    user_state[user_id] = None  # Fine modalità inserimento
+
+    risposta = []
+
+    if aggiunti:
+        risposta.append(f"✅ Aggiunti {len(aggiunti)} ISBN:\n" + "\n".join(f"• {i}" for i in aggiunti))
+    if duplicati:
+        risposta.append(f"⚠️ Già presenti:\n" + "\n".join(f"• {i}" for i in duplicati))
+    if invalidi:
+        risposta.append(f"❌ Non trovati o non validi:\n" + "\n".join(f"• {i}" for i in invalidi))
+
+    await update.message.reply_text("\n\n".join(risposta))
+
 
 # === post_start per avviare i job dopo il polling ===
 async def post_start(app):
