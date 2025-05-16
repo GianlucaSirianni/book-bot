@@ -11,13 +11,13 @@ from telegram.ext import (
 )
 from apscheduler.schedulers.background import BackgroundScheduler
 
-# === CONFIG ===
+#! === CONFIG ===
 TOKEN = "7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ"
 DATA_FILE = "isbn_data.json"
 SETTINGS_FILE = "user_settings.json"
 user_state = {}  # { user_id: "inserimento" o None }
 
-# === Caricamento dati ===
+#! === CARICAMENTO DATI ===
 def load_json(file):
     if not os.path.exists(file):
         return {}
@@ -31,12 +31,12 @@ def save_json(file, data):
 user_isbn_map = load_json(DATA_FILE)
 user_settings = load_json(SETTINGS_FILE)
 
-# === UTILITIES ===
+#! === UTILITIES ===
 def clean_title(raw_title: str) -> str:
     base = ' '.join(raw_title.split())
     return re.sub(r'\s*-\s*', ' - ', base)
 
-# === OTTENGO LE INFO DEL SINGOLO LIBRO PARTENDO DA ISBN ===
+#! === OTTENGO LE INFO DEL SINGOLO LIBRO PARTENDO DA ISBN ===
 def get_book_info(isbn):
     url = f"https://blackwells.co.uk/bookshop/product/{isbn}"
     # MIGLIORARE USER AGENT PER RIUSCIRE A NON FARE I COGLIONI E MAGARI NON FARSI BECCARE
@@ -62,7 +62,7 @@ def get_book_info(isbn):
         print(f"[{isbn}] Errore durante il recupero: {e}")
         return None
 
-# === CHECK PER SCONTI ===
+#! === CHECK PER SCONTI E INVIO NOTIFICA ===
 async def notify_user(app, user_id):
     books = user_isbn_map.get(user_id, [])
     if not books:
@@ -100,7 +100,7 @@ async def notify_user(app, user_id):
 
     await app.bot.send_message(chat_id=user_id, text=msg)
 
-# === NOTIFICHE JOB ===
+#! === NOTIFICHE JOB ===
 def schedule_user_jobs(app, scheduler, loop):
     for user_id, settings in user_settings.items():
         time_str = settings.get("time")
@@ -123,11 +123,12 @@ def schedule_user_jobs(app, scheduler, loop):
             replace_existing=True
         )
 
-# === COMANDI BOT ===
+#! === COMANDI BOT ===
 
+# === Inizializza la conversazione/ === #§ === /start ===
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Ciao! Usa /help per avere una lista dei comandi completa.")
-    
+# === Mostra la lista dei comandi attuamente disponibili === #§ === /help ===
 async def helpme(update: Update, context: ContextTypes.DEFAULT_TYPE):
     help_text = (
         "📚 *Benvenuto! Ecco cosa puoi fare con il bot:*\n\n"
@@ -140,7 +141,7 @@ async def helpme(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "ℹ️ /help – Mostra questo elenco di comandi\n"
     )
     await update.message.reply_text(help_text, parse_mode="Markdown")
-
+# === Per impostare l'orario in cui vuoi ricevere la notifica === #§ === /settime ===
 async def settime(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = str(update.effective_user.id)
     if not context.args or not context.args[0].count(":") == 1:
@@ -167,7 +168,7 @@ async def settime(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"✅ Orario notifiche impostato alle {context.args[0]}.")
     except ValueError:
         await update.message.reply_text("❌ Formato orario non valido. Usa HH:MM")
-
+# === Controlla l'orario impostato per la notifica === #§ === /checktime ===
 async def checktime(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = str(update.effective_user.id)
     time_str = user_settings.get(user_id, {}).get("time")
@@ -175,12 +176,12 @@ async def checktime(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(f"⏰ Riceverai le notifiche ogni giorno alle {time_str}.")
     else:
         await update.message.reply_text("⚠️ Non hai ancora impostato un orario. Usa /settime HH:MM")
-
+# === Inserisci una lista di ISBN per aggiungere i libri === #§ === /insert ===
 async def insert(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = str(update.effective_user.id)
     user_state[user_id] = "inserimento"
     await update.message.reply_text("Inserisci uno o più codici ISBN (uno per riga e senza caratteri che non siano numeri all'interno del codice):")
-
+# === Mostra la lista dei Libri attualmente inseriti === #§ === /list ===
 async def list_isbn(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = str(update.effective_user.id)
     lista = user_isbn_map.get(user_id, [])
@@ -206,7 +207,7 @@ async def list_isbn(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ])
 
         await update.message.reply_text(text, reply_markup=keyboard, parse_mode="Markdown")
-
+# === Fai refresh manuale delle info dei libri in lista (ATTUALMENTE NON MOSTRATO)=== #§ === /refresh ===
 async def refresh(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = str(update.effective_user.id)
     books = user_isbn_map.get(user_id, [])
@@ -238,13 +239,10 @@ async def refresh(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text("🔄 Refresh completato:\n\n" + "\n\n".join(changes))
     else:
         await update.message.reply_text("❌ Nessun cambiamento trovato.")
-
+# === Mostra solo una lista dei libri in sconto === #§ === /saves ===
 async def saves(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await notify_user(context.application, str(update.effective_user.id))
-    
-from telegram.ext import CallbackQueryHandler
-
-
+# === Elimina un libro dalla lista === #§ === N.D. ===
 async def delete_book_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
@@ -266,8 +264,7 @@ async def delete_book_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         save_json(DATA_FILE, user_isbn_map)
 
         await query.edit_message_text(f"✅ Libro rimosso con successo.\n🔢 ISBN: {isbn_to_delete}")
-
-
+# === Parte per gestire i messaggi inviati all'utente con possibili risposte === #§ === N.D. ===
 async def gestisci_messaggio(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = str(update.effective_user.id)
     stato = user_state.get(user_id)
@@ -317,12 +314,12 @@ async def gestisci_messaggio(update: Update, context: ContextTypes.DEFAULT_TYPE)
     await update.message.reply_text("\n\n".join(risposta))
 
 
-# === post_start per avviare i job dopo il polling ===
+#! === PER AVVIARE I JOBS DOPO IL POLLING ===
 async def post_start(app):
     loop = asyncio.get_running_loop()
     schedule_user_jobs(app, scheduler, loop)
 
-# === MAIN ===
+#! === MAIN ===
 def main():
     global scheduler
     scheduler = BackgroundScheduler()
