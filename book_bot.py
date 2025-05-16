@@ -265,7 +265,7 @@ async def delete_book_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         user_isbn_map[user_id] = new_books
         save_json(DATA_FILE, user_isbn_map)
 
-        await query.edit_message_text("✅ Libro rimosso con successo.")
+        await query.edit_message_text(f"✅ Libro rimosso con successo.\n🔢 ISBN: {isbn_to_delete}")
 
 
 async def gestisci_messaggio(update: Update, context: ContextTypes.DEFAULT_TYPE):
