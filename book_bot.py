@@ -11,6 +11,10 @@ from telegram.ext import (
 )
 from apscheduler.schedulers.background import BackgroundScheduler
 
+
+#? === VERSIONE ===
+__version__ = "0.1.0-beta"
+
 #! === CONFIG ===
 TOKEN = "7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ"
 DATA_FILE = "isbn_data.json"
@@ -127,18 +131,18 @@ def schedule_user_jobs(app, scheduler, loop):
 
 # === Inizializza la conversazione/ === #§ === /start ===
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Ciao! Usa /help per avere una lista dei comandi completa.")
+    await update.message.reply_text("Benvenut*! Usa /help per avere una lista dei comandi completa.")
 # === Mostra la lista dei comandi attuamente disponibili === #§ === /help ===
 async def helpme(update: Update, context: ContextTypes.DEFAULT_TYPE):
     help_text = (
-        "📚 *Benvenuto! Ecco cosa puoi fare con il bot:*\n\n"
+        "📚 *Benvenut*! Ecco cosa puoi fare con il bot:*\n\n"
         "✏️ /insert – Inserisci i codici ISBN da monitorare\n"
         "📖 /list – Elenca i libri attualmente inseriti\n"
         "⏰ /settime HH:MM – Imposta l'orario per la notifica giornaliera\n"
         "🕵️ /checktime – Controlla l'orario delle notifiche\n"
         "🔥 /sales – Mostra le offerte attive in questo momento\n"
-        "🔄 /refresh – Forza l’aggiornamento dei dati dei tuoi libri\n"
         "ℹ️ /help – Mostra questo elenco di comandi\n"
+        "🤖 /v – Versione\n"
     )
     await update.message.reply_text(help_text, parse_mode="Markdown")
 # === Per impostare l'orario in cui vuoi ricevere la notifica === #§ === /settime ===
@@ -312,6 +316,11 @@ async def gestisci_messaggio(update: Update, context: ContextTypes.DEFAULT_TYPE)
         risposta.append(f"❌ Non trovati o non validi:\n" + "\n".join(f"• {i}" for i in invalidi))
 
     await update.message.reply_text("\n\n".join(risposta))
+# === Parte per gestire i messaggi inviati all'utente con possibili risposte === #§ === /v ===
+async def version(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(f"🤖 Versione attuale del bot: {__version__}")
+    
+async def 
 
 
 #! === PER AVVIARE I JOBS DOPO IL POLLING ===
@@ -335,6 +344,7 @@ def main():
     app.add_handler(CommandHandler("saves", saves))
     app.add_handler(CommandHandler("settime", settime, block=False))
     app.add_handler(CommandHandler("checktime", checktime))
+    app.add_handler(CommandHandler("v", version))
     app.add_handler(CallbackQueryHandler(delete_book_callback))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, gestisci_messaggio))
 
