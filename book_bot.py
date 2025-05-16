@@ -319,8 +319,18 @@ async def gestisci_messaggio(update: Update, context: ContextTypes.DEFAULT_TYPE)
 # === Parte per gestire i messaggi inviati all'utente con possibili risposte === #§ === /v ===
 async def version(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(f"🤖 Versione attuale del bot: {__version__}")
-    
-async def 
+
+async def usnum(date: Update, context: ContextTypes.DEFAULT_TYPE):
+    total_settings = len(user_settings)
+    total_isbn_users = len(user_isbn_map)
+    total_users = len(set(user_settings.keys()) | set(user_isbn_map.keys()))
+
+    await update.message.reply_text(
+        f"👥 Utenti che hanno usato il bot:\n"
+        f"• Con orario notifiche impostato: {total_settings}\n"
+        f"• Con almeno un libro salvato: {total_isbn_users}\n"
+        f"📊 Totale utenti unici: {total_users}"
+    )
 
 
 #! === PER AVVIARE I JOBS DOPO IL POLLING ===
@@ -345,6 +355,7 @@ def main():
     app.add_handler(CommandHandler("settime", settime, block=False))
     app.add_handler(CommandHandler("checktime", checktime))
     app.add_handler(CommandHandler("v", version))
+    app.add_handler(CommandHandler("usnum", usnum))
     app.add_handler(CallbackQueryHandler(delete_book_callback))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, gestisci_messaggio))
 
