@@ -3,20 +3,52 @@
     {
       "isbn": "9780593967041",
       "title": "Pokémon Life Size",
-      "price": "22,76€",
+      "price": "22,90€",
       "discount": null
     },
     {
       "isbn": "9798895612583",
       "title": "Remnants of Filth: Yuwu (Novel) Vol. 7 (Special Edition) - Remnants of Filth: Yuwu (Novel)",
-      "price": "30,33€",
-      "discount": "Save 2,66€"
+      "price": "30,50€",
+      "discount": "Save 2,73€"
     },
     {
       "isbn": "9798893731248",
       "title": "Heaven Official's Blessing: Tian Guan Ci Fu (Deluxe Hardcover Novel) Vol. 2 - Heaven Official's Blessing: Tian Guan Ci Fu (Novel)",
-      "price": "33,30€",
+      "price": "33,53€",
       "discount": null
+    }
+  ],
+  "219652541": [
+    {
+      "isbn": "9781250245281",
+      "title": "Empire of the Vampire",
+      "price": "36,12€",
+      "discount": null
+    },
+    {
+      "isbn": "9781250245373",
+      "title": "Empire of the Dawn Book Three - Empire of the Vampire",
+      "price": "31,97€",
+      "discount": null
+    },
+    {
+      "isbn": "9781250245335",
+      "title": "Empire of the Damned - Empire of the Vampire",
+      "price": "32,67€",
+      "discount": "Save 5,32€"
+    },
+    {
+      "isbn": "9781529001389",
+      "title": "Sword Catcher - The Chronicles of Castellane",
+      "price": "25,34€",
+      "discount": "Save 0,78€"
+    },
+    {
+      "isbn": "9781529001433",
+      "title": "The Ragpicker King - The Chronicles of Castellane",
+      "price": "21,11€",
+      "discount": "Save 5,01€"
     }
   ]
 }

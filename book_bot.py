@@ -135,7 +135,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # === Mostra la lista dei comandi attuamente disponibili === #§ === /help ===
 async def helpme(update: Update, context: ContextTypes.DEFAULT_TYPE):
     help_text = (
-        "📚 *Benvenut*! Ecco cosa puoi fare con il bot:*\n\n"
+        "📚 *Benvenutə!* Ecco cosa puoi fare con il bot:\n\n"
         "✏️ /insert – Inserisci i codici ISBN da monitorare\n"
         "📖 /list – Elenca i libri attualmente inseriti\n"
         "⏰ /settime HH:MM – Imposta l'orario per la notifica giornaliera\n"
