@@ -104,7 +104,7 @@ async def notify_user(app, user_id):
 
     await app.bot.send_message(chat_id=user_id, text=msg)
 
-#! === NOTIFICHE JOB ===
+#! === NOTIFICHE GIORNALIERE JOB ===
 def schedule_user_jobs(app, scheduler, loop):
     for user_id, settings in user_settings.items():
         time_str = settings.get("time")
@@ -140,7 +140,7 @@ async def helpme(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "📖 /list – Elenca i libri attualmente inseriti\n"
         "⏰ /settime HH:MM – Imposta l'orario per la notifica giornaliera\n"
         "🕵️ /checktime – Controlla l'orario delle notifiche\n"
-        "🔥 /sales – Mostra le offerte attive in questo momento\n"
+        "🔥 /saves – Mostra le offerte attive in questo momento\n"
         "ℹ️ /help – Mostra questo elenco di comandi\n"
         "🤖 /v – Versione\n"
     )
@@ -196,14 +196,14 @@ async def list_isbn(update: Update, context: ContextTypes.DEFAULT_TYPE):
     for book in lista:
         title = book.get('title', 'Titolo non disponibile')
         price = book.get('price', 'Prezzo non disponibile')
-        discount = book.get('discount', 'Nessuno')
+        discount = book.get('discount')
         isbn = book.get('isbn')
 
         text = (
             f"📚 *{title}*\n"
             f"💰 Prezzo: {price}\n"
-            f"{'🔥 Sconto: ' + discount + '\n' if discount else ''}"
-            f"🔢 ISBN: {isbn}"
+            f"🔢 ISBN: {isbn}\n"
+            f"{f'*🔥 SCONTO:* {discount}' if discount else ''}"
         )
 
         keyboard = InlineKeyboardMarkup([
@@ -211,6 +211,7 @@ async def list_isbn(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ])
 
         await update.message.reply_text(text, reply_markup=keyboard, parse_mode="Markdown")
+
 # === Fai refresh manuale delle info dei libri in lista (ATTUALMENTE NON MOSTRATO)=== #§ === /refresh ===
 async def refresh(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = str(update.effective_user.id)
