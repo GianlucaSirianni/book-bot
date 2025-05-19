@@ -3,6 +3,7 @@ import json
 import requests
 import asyncio
 import re
+from datetime import datetime
 from bs4 import BeautifulSoup
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
@@ -13,7 +14,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 
 #? === VERSIONE ===
-__version__ = "0.1.0-beta"
+__version__ = "0.2.0-beta"
 
 #! === CONFIG ===
 TOKEN = "7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ"
@@ -43,7 +44,6 @@ def clean_title(raw_title: str) -> str:
 #! === OTTENGO LE INFO DEL SINGOLO LIBRO PARTENDO DA ISBN ===
 def get_book_info(isbn):
     url = f"https://blackwells.co.uk/bookshop/product/{isbn}"
-    # MIGLIORARE USER AGENT PER RIUSCIRE A NON FARE I COGLIONI E MAGARI NON FARSI BECCARE
     headers = {"User-Agent": "Mozilla/5.0"}
 
     try:
@@ -56,18 +56,28 @@ def get_book_info(isbn):
         title_tag = main.find("h1", class_="product__name")
         price_tag = main.find("li", class_="product-price--current")
         discount_tag = main.find("p", class_="product-price--discount")
+        date_tag = soup.find("td", itemprop="datePublished")
 
         title = clean_title(title_tag.text.strip()) if title_tag else "Titolo non trovato"
         price = price_tag.text.strip() if price_tag else "Prezzo non trovato"
         discount = discount_tag.text.strip() if discount_tag and "Save" in discount_tag.text else None
+        pub_date = date_tag.text.strip() if date_tag else None
 
-        return {"title": title, "price": price, "discount": discount}
+        return {
+            "title": title,
+            "price": price,
+            "discount": discount,
+            "release_date": pub_date
+        }
+
     except Exception as e:
         print(f"[{isbn}] Errore durante il recupero: {e}")
         return None
 
+
 #! === CHECK PER SCONTI E INVIO NOTIFICA ===
 async def notify_user(app, user_id):
+    print(f"[NOTIFY] Invio notifica all'utente {user_id}...")
     books = user_isbn_map.get(user_id, [])
     if not books:
         return
@@ -105,6 +115,33 @@ async def notify_user(app, user_id):
     await app.bot.send_message(chat_id=user_id, text=msg)
 
 #! === NOTIFICHE GIORNALIERE JOB ===
+
+
+async def check_releases(app):
+    today = datetime.now().strftime("%#d %B %Y")  # su Windows
+    print(f"[DEBUG] Today is: {today}")
+    messages = {}
+
+
+    for user_id, books in user_isbn_map.items():
+        print(f"[DEBUG] Libri per utente {user_id}:")
+        today_books = []
+        for book in books:
+            url = "https://blackwells.co.uk/bookshop/product/"
+            isbn = book["isbn"]
+            print(f"[DEBUG] Book: {book.get('title')} — Release: {book.get('release_date')}")
+            if book.get("release_date") == today:
+                today_books.append(f"📗 *{book.get('title')}*\n 🔗{url}{isbn}")
+
+        if today_books:
+            messages[user_id] = "\n\n".join(today_books)
+
+    for user_id, text in messages.items():
+        print(f"[DEBUG] Invia notifica a {user_id}")
+        await app.bot.send_message(chat_id=user_id, text=f"📦 Novità in uscita oggi:\n\n{text}", parse_mode="Markdown")
+
+
+
 def schedule_user_jobs(app, scheduler, loop):
     for user_id, settings in user_settings.items():
         time_str = settings.get("time")
@@ -124,7 +161,8 @@ def schedule_user_jobs(app, scheduler, loop):
             hour=hour,
             minute=minute,
             id=f"notify_{user_id}",
-            replace_existing=True
+            replace_existing=True,
+            misfire_grace_time=5
         )
 
 #! === COMANDI BOT ===
@@ -166,7 +204,8 @@ async def settime(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 notify_user(context.application, uid), loop
             ),
             trigger="cron", hour=hour, minute=minute,
-            id=f"notify_{user_id}", replace_existing=True
+            id=f"notify_{user_id}", replace_existing=True,
+            misfire_grace_time=5
         )
 
         await update.message.reply_text(f"✅ Orario notifiche impostato alle {context.args[0]}.")
@@ -320,8 +359,15 @@ async def gestisci_messaggio(update: Update, context: ContextTypes.DEFAULT_TYPE)
 # === Parte per gestire i messaggi inviati all'utente con possibili risposte === #§ === /v ===
 async def version(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(f"🤖 Versione attuale del bot: {__version__}")
+    await update.message.reply_text(
+        "📢 Aggiornamento del 19/05/2025\n\n"
+        "È attiva una nuova funzionalità: da oggi riceverai una notifica il giorno in cui esce uno dei libri che hai inserito!\n\n"
+        "Il controllo avviene ogni mattina alle 9:30, così non ti perderai nessuna nuova uscita. 🎉"
+    )
 
-async def usnum(date: Update, context: ContextTypes.DEFAULT_TYPE):
+    
+
+async def usnum(update: Update, context: ContextTypes.DEFAULT_TYPE):
     total_settings = len(user_settings)
     total_isbn_users = len(user_isbn_map)
     total_users = len(set(user_settings.keys()) | set(user_isbn_map.keys()))
@@ -332,12 +378,33 @@ async def usnum(date: Update, context: ContextTypes.DEFAULT_TYPE):
         f"• Con almeno un libro salvato: {total_isbn_users}\n"
         f"📊 Totale utenti unici: {total_users}"
     )
+    
+#! === !!!!!!!!!!!!!! DEBUG FUNCTIONS !!!!!!!!!!!! ===
+
+async def test_release(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("🔍 Test rilascio manuale in corso...")
+    await check_releases(context.application)
+
+
+#!----------------------------------------------------
 
 
 #! === PER AVVIARE I JOBS DOPO IL POLLING ===
 async def post_start(app):
     loop = asyncio.get_running_loop()
     schedule_user_jobs(app, scheduler, loop)
+
+    scheduler.add_job(
+        lambda: asyncio.run_coroutine_threadsafe(check_releases(app), loop),
+        trigger="cron",
+        hour=9,
+        minute=30,
+        id="release_check",
+        replace_existing=True,
+        misfire_grace_time=30  # (opzionale ma consigliato)
+    )
+
+
 
 #! === MAIN ===
 def main():
@@ -346,6 +413,10 @@ def main():
     scheduler.start()
 
     app = ApplicationBuilder().token(TOKEN).post_init(post_start).build()
+
+    #! === debug command
+    app.add_handler(CommandHandler("testrelease", test_release))
+    #!------------------
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("help", helpme))

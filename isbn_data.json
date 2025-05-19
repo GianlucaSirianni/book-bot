@@ -1,22 +1,11 @@
 {
   "201680930": [
     {
-      "isbn": "9780593967041",
-      "title": "Pokémon Life Size",
-      "price": "22,90€",
-      "discount": null
-    },
-    {
-      "isbn": "9798895612583",
-      "title": "Remnants of Filth: Yuwu (Novel) Vol. 7 (Special Edition) - Remnants of Filth: Yuwu (Novel)",
-      "price": "30,50€",
-      "discount": "Save 2,73€"
-    },
-    {
-      "isbn": "9781530068920",
-      "title": "Le Linee Parallele Si Incrociano - Giovani",
-      "price": "18,41€",
-      "discount": null
+      "isbn": "9782490952571",
+      "title": "The Silk Road: A Living History",
+      "price": "47,65€",
+      "discount": "Save 5,77€",
+      "release_date": "20 May 2025"
     }
   ],
   "219652541": [
@@ -71,7 +60,7 @@
     {
       "isbn": "9780593955055",
       "title": "The Ever Queen - The Ever Seas Series",
-      "price": "28,38€",
+      "price": "33,32€",
       "discount": null
     },
     {
