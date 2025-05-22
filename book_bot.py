@@ -3,7 +3,8 @@ import json
 import requests
 import asyncio
 import re
-from datetime import datetime
+import logging
+from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
@@ -11,10 +12,25 @@ from telegram.ext import (
     ContextTypes, filters, CallbackQueryHandler
 )
 from apscheduler.schedulers.background import BackgroundScheduler
+from logging.handlers import TimedRotatingFileHandler
 
 
 #? === VERSIONE ===
 __version__ = "0.2.0-beta"
+
+#! === LOGGING SETUP ===
+""" log_handler = TimedRotatingFileHandler("bot.log", when="midnight", interval=1, backupCount=2, encoding="utf-8")
+log_handler.suffix = "%Y-%m-%d"
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        log_handler,
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__) """
 
 #! === CONFIG ===
 TOKEN = "7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ"

@@ -13,115 +13,134 @@
       "isbn": "9781250245281",
       "title": "Empire of the Vampire",
       "price": "36,12€",
-      "discount": null
+      "discount": null,
+      "release_date": "14 Sep 2021"
     },
     {
       "isbn": "9781250245373",
       "title": "Empire of the Dawn Book Three - Empire of the Vampire",
       "price": "31,97€",
-      "discount": null
+      "discount": null,
+      "release_date": "04 Nov 2025"
     },
     {
       "isbn": "9781250245335",
       "title": "Empire of the Damned - Empire of the Vampire",
       "price": "32,67€",
-      "discount": "Save 5,32€"
+      "discount": "Save 5,32€",
+      "release_date": "12 Mar 2024"
     },
     {
       "isbn": "9781529001389",
       "title": "Sword Catcher - The Chronicles of Castellane",
       "price": "25,34€",
-      "discount": "Save 0,78€"
+      "discount": "Save 0,78€",
+      "release_date": "10 Oct 2023"
     },
     {
       "isbn": "9781529001433",
       "title": "The Ragpicker King - The Chronicles of Castellane",
       "price": "21,11€",
-      "discount": "Save 5,01€"
+      "discount": "Save 5,01€",
+      "release_date": "04 Mar 2025"
     },
     {
       "isbn": "9781035063390",
       "title": "A Time of Dread - Of Blood and Bone",
       "price": "13,57€",
-      "discount": null
+      "discount": null,
+      "release_date": "31 Jul 2025"
     },
     {
       "isbn": "9781035063413",
       "title": "A Time of Courage - Of Blood and Bone",
       "price": "13,57€",
-      "discount": null
+      "discount": null,
+      "release_date": "31 Jul 2025"
     },
     {
       "isbn": "9781035063406",
       "title": "A Time of Blood - Of Blood and Bone",
       "price": "13,57€",
-      "discount": null
+      "discount": null,
+      "release_date": "31 Jul 2025"
     },
     {
       "isbn": "9780593955055",
       "title": "The Ever Queen - The Ever Seas Series",
       "price": "33,32€",
-      "discount": null
+      "discount": null,
+      "release_date": "16 Sep 2025"
     },
     {
       "isbn": "9780593955024",
       "title": "The Ever King - Ever Seas Series",
       "price": "28,38€",
-      "discount": null
+      "discount": null,
+      "release_date": "05 Aug 2025"
     },
     {
       "isbn": "9781399614931",
       "title": "Mistborn Quartet Boxed Set - Mistborn",
       "price": "45,36€",
-      "discount": "Save 6,86€"
+      "discount": "Save 6,86€",
+      "release_date": "18 Jan 2024"
     },
     {
       "isbn": "9781399622325",
       "title": "Skyward Series Boxed Set",
       "price": "50,88€",
-      "discount": "Save 8,47€"
+      "discount": "Save 8,47€",
+      "release_date": "02 Jan 2025"
     },
     {
       "isbn": "9781803364919",
       "title": "If We Were Villains",
       "price": "25,03€",
-      "discount": null
+      "discount": null,
+      "release_date": "04 Apr 2023"
     },
     {
       "isbn": "9781529935516",
       "title": "Blood Over Bright Haven",
       "price": "27,22€",
-      "discount": null
+      "discount": null,
+      "release_date": "29 Oct 2024"
     },
     {
       "isbn": "9780316361194",
       "title": "The First Law Trilogy - The First Law Trilogy",
-      "price": "54,86€",
-      "discount": null
+      "price": "55,96€",
+      "discount": null,
+      "release_date": "15 Nov 2016"
     },
     {
       "isbn": "9780316187244",
       "title": "The Wisdom of Crowds - The Age of Madness",
       "price": "31,26€",
-      "discount": null
+      "discount": null,
+      "release_date": "14 Sep 2021"
     },
     {
       "isbn": "9780316187183",
       "title": "The Trouble With Peace - The Age of Madness;",
       "price": "31,46€",
-      "discount": "Save 1,78€"
+      "discount": "Save 1,78€",
+      "release_date": "15 Sep 2020"
     },
     {
       "isbn": "9780316187169",
       "title": "A Little Hatred - The Age of Madness",
       "price": "31,14€",
-      "discount": null
+      "discount": null,
+      "release_date": "17 Sep 2019"
     },
     {
       "isbn": "9780356520674",
       "title": "The Gods Below - Hollow Covenant",
       "price": "28,64€",
-      "discount": null
+      "discount": null,
+      "release_date": "05 Sep 2024"
     }
   ],
   "116396045": [
@@ -129,7 +148,8 @@
       "isbn": "9781526666321",
       "title": "Harry Potter and the Prisoner of Azkaban - The Harry Potter Series",
       "price": "42,57€",
-      "discount": "Save 4,91€"
+      "discount": "Save 4,91€",
+      "release_date": "03 Oct 2023"
     }
   ]
 }

@@ -1,0 +1,34 @@
+2025-05-21 09:19:01,866 - INFO - Scheduler started
+2025-05-21 09:19:05,592 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getMe "HTTP/1.1 200 OK"
+2025-05-21 09:19:05,610 - INFO - Added job "schedule_user_jobs.<locals>.<lambda>" to job store "default"
+2025-05-21 09:19:05,620 - INFO - Added job "schedule_user_jobs.<locals>.<lambda>" to job store "default"
+2025-05-21 09:19:05,627 - INFO - Added job "schedule_user_jobs.<locals>.<lambda>" to job store "default"
+2025-05-21 09:19:05,631 - INFO - Added job "post_start.<locals>.<lambda>" to job store "default"
+2025-05-21 09:19:05,673 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/deleteWebhook "HTTP/1.1 200 OK"
+2025-05-21 09:19:05,682 - INFO - Scheduler started
+2025-05-21 09:19:05,686 - INFO - Application started
+2025-05-21 09:19:15,781 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getUpdates "HTTP/1.1 200 OK"
+2025-05-21 09:19:25,830 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getUpdates "HTTP/1.1 200 OK"
+2025-05-21 09:19:35,862 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getUpdates "HTTP/1.1 200 OK"
+2025-05-21 09:19:45,894 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getUpdates "HTTP/1.1 200 OK"
+2025-05-21 09:19:55,927 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getUpdates "HTTP/1.1 200 OK"
+2025-05-21 09:20:05,960 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getUpdates "HTTP/1.1 200 OK"
+2025-05-21 09:20:15,991 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getUpdates "HTTP/1.1 200 OK"
+2025-05-21 09:20:18,381 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getUpdates "HTTP/1.1 200 OK"
+2025-05-21 09:20:18,549 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/sendMessage "HTTP/1.1 200 OK"
+2025-05-21 09:20:28,422 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getUpdates "HTTP/1.1 200 OK"
+2025-05-21 09:20:38,455 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getUpdates "HTTP/1.1 200 OK"
+2025-05-21 09:20:48,489 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getUpdates "HTTP/1.1 200 OK"
+2025-05-21 09:20:58,524 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getUpdates "HTTP/1.1 200 OK"
+2025-05-21 09:21:08,557 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getUpdates "HTTP/1.1 200 OK"
+2025-05-21 09:21:18,592 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getUpdates "HTTP/1.1 200 OK"
+2025-05-21 09:21:28,626 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getUpdates "HTTP/1.1 200 OK"
+2025-05-21 09:21:38,663 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getUpdates "HTTP/1.1 200 OK"
+2025-05-21 09:21:48,697 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getUpdates "HTTP/1.1 200 OK"
+2025-05-21 09:21:58,733 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getUpdates "HTTP/1.1 200 OK"
+2025-05-21 09:22:08,767 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getUpdates "HTTP/1.1 200 OK"
+2025-05-21 09:22:18,800 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getUpdates "HTTP/1.1 200 OK"
+2025-05-21 09:22:26,211 - INFO - HTTP Request: POST https://api.telegram.org/bot7810048214:AAH8deqsPMVevWI5vhqXaR3GOaTZqILvmTQ/getUpdates "HTTP/1.1 200 OK"
+2025-05-21 09:22:26,213 - INFO - Application is stopping. This might take a moment.
+2025-05-21 09:22:26,215 - INFO - Scheduler has been shut down
+2025-05-21 09:22:26,227 - INFO - Application.stop() complete
